@@ -1,0 +1,394 @@
+---
+title: "Visualização das testes e dissertações sobre **biblioteca digital** na BDTD"
+output: html_notebook
+---
+## Importação das bibliotecas
+
+Bibliotecas utilizadas:
+
+* dplyr
+* ggplot2
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+## Importação dos dados
+
+```{r}
+bdtd_biblioteca_digital <- read.csv("https://raw.githubusercontent.com/FranciscoFoz/Visualizacao_teses_dissertacoes_biblioteca_digital_BDTD/main/Dataset/BDTD_biblioteca_digital.csv",
+                                    sep= ";")
+```
+
+## Selecionando as colunas necessárias
+
+```{r}
+bdtd_biblioteca_digital <- select(bdtd_biblioteca_digital,id,institutions,types,publicationDates)
+```
+
+Renomeei as colunas.
+
+```{r}
+colnames(bdtd_biblioteca_digital) <- c('id','instituicao','tipos','ano_publicacao')
+```
+
+### Quantidade total de documentos
+
+```{r}
+quantidade_total_documentos <- count(bdtd_biblioteca_digital)
+quantidade_total_documentos
+```
+
+```{r}
+#Plotando o gráfico
+ggplot(quantidade_total_documentos, aes(label = n))+                            
+geom_text(aes(x=1.5,y=3),color='darkorchid4',size=80,fontface='bold') + 
+
+#Configurando o título        
+ggtitle('Quantidade de teses e dissertações\n sobre biblioteca digital') +      
+
+#Configurando os eixos
+xlim(0,5)+
+ylim(0,5)+
+
+#Configurando o estilo do gráfico
+theme(
+  panel.background = element_rect(fill = 'white'),
+  axis.title = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.ticks = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_text(size=28)) +
+annotate('text',x=0,y=0.2,
+  label='Indexadas na BDTD de 1998 a 2019',
+  col='darkgrey',
+  cex=9,
+  fontface='bold',
+  adj=0)
+```
+
+### Quantidade de teses e dissertações
+
+Agora verificarei a quantidade de teses e dissertações entre o total.
+
+```{r}
+#Modificando o nome do tipo de documento
+bdtd_biblioteca_digital[bdtd_biblioteca_digital=="doctoralThesis"] <- "Teses"
+bdtd_biblioteca_digital[bdtd_biblioteca_digital=="masterThesis"] <- "Dissertações"
+
+freq_teses_dissertacoes <- cbind(frequencia = table(bdtd_biblioteca_digital$tipos), percentual= prop.table(table(bdtd_biblioteca_digital$tipos)) * 100)
+freq_teses_dissertacoes
+```
+
+Apenas 10.6% dos documentos são teses.
+
+```{r}
+teses_dissertacoes <- data.frame(freq_teses_dissertacoes)
+teses_dissertacoes$`tipo` <- rownames(teses_dissertacoes)
+teses_dissertacoes
+
+```
+
+```{r}
+freq_teses_dissertacoes <- data.frame(freq_teses_dissertacoes)
+freq_teses_dissertacoes
+
+```
+
+#### Dissertação X Teses: Gráfico de torta
+
+```{r}
+#Plotando gráfico
+ggplot(data= teses_dissertacoes) + 
+geom_bar(aes(x='',y=frequencia,fill=tipo),stat='identity') + 
+
+#Modificando para gerar o gráfico de torta
+coord_polar(theta='y',start=0) +
+
+#Plotando os rótulos
+geom_text(aes(x='', y=frequencia,label = frequencia),
+              hjust=2,vjust=-1,size=5,fontface='bold') + 
+
+#Plotando o título e subtítulo
+ggtitle('Quantidade total de teses e dissertações sobre biblioteca digital',
+        'Indexadas na BDTD de 1998 a 2019') +
+
+#Modificando a legenda e cores
+scale_fill_manual(name="Tipo", 
+                  values = c("Dissertações"="darkorchid4", "Teses"="darkorchid1")) +
+
+#Configurando o tema
+theme(
+  panel.background = element_rect(fill = 'white'),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.ticks = element_blank(),
+  axis.text.x = element_blank(),
+  plot.title=element_text(size=14),
+  plot.subtitle=element_text(colour='darkgrey',face='bold', size=12)
+)
+```
+Mas gráficos de tortas não são tão legais para se visualizar dados. Então irei plotar um gráfico de barras empilhadas.
+
+#### Dissertação X Teses: Gráfico de barras empilhadas
+
+```{r}
+#Plotando o gráfico
+ggplot(data= teses_dissertacoes) + 
+geom_bar(aes(y='',x=frequencia,fill=tipo),stat='identity',width = 0.5) +
+
+#Configurando título, rótulos e eixos
+ggtitle('Quantidade total de teses e dissertações sobre biblioteca digital','Indexadas na BDTD de 1998 a 2019') +
+geom_text(aes(y='', x=frequencia,label = frequencia),hjust= 3,size=5,fontface='bold') +
+labs(x='',y='') + 
+
+#Configurando legenda e cores
+scale_fill_manual(name="Tipo", 
+                  values = c("Dissertações"="darkorchid4", "Teses"="darkorchid1"))+  
+
+#Configurando o tema
+theme(
+  panel.background = element_rect(fill = 'white'),
+  axis.text.x=element_blank(),
+  axis.ticks= element_blank(),
+  plot.title=element_text(size=15),
+  legend.position= c(.9,.9),
+  plot.subtitle=element_text(colour='darkgrey',face='bold', size=12)) + 
+
+#Plotando o texto
+annotate(geom='text',label='Do total de 66 documentos ',x=0,y=0.65,size=4,color='black',fontface='bold',adj = 0) +
+annotate(geom='text',label='10.6% são teses',x=0,y=0.6,size=4,color='darkorchid1',fontface='bold',adj = 0) + 
+annotate(geom='text',label='89.4% são dissertações',x=0,y=0.55,size=4,color='darkorchid4',fontface='bold',adj = 0)
+```
+### Dissertação X Teses: Visualização ao longo do tempo
+
+
+```{r}
+freq_ano <- cbind(frequencia = table(bdtd_biblioteca_digital$ano_publicacao), percentual= prop.table(table(bdtd_biblioteca_digital$ano_publicacao)) * 100)
+freq_ano
+```
+
+Durante o período de 1998 a 2019, teve um pico bem grande em 2011, para os trabalhos publicados sobre o tema.
+
+#### Verificando a quantidade anual de dissertações e teses
+
+```{r}
+freq_teses_dissertacoes_ano <- table(bdtd_biblioteca_digital$ano_publicacao,bdtd_biblioteca_digital$tipos)
+freq_teses_dissertacoes_ano
+```
+
+```{r}
+freq_teses_dissertacoes_ano <- as.data.frame(freq_teses_dissertacoes_ano)
+colnames(freq_teses_dissertacoes_ano) <- c('ano','tipos','freq')
+freq_teses_dissertacoes_ano
+```
+
+#### Criando o gráfico de linha
+
+```{r}
+#Plotando o gráfico
+ggplot(data=freq_teses_dissertacoes_ano) + 
+geom_line(aes(x=ano,y=freq,group=tipos,color=tipos),size = 1)+
+
+#Alterando o limite do eixo y
+scale_y_continuous(breaks = seq(0, 15, by = 1))+
+
+#Configurando a legenda e as cores
+scale_color_manual(name="Tipo", 
+                  values = c("Dissertações"="darkorchid4", "Teses"="darkorchid1")) + 
+
+#Configurando o título e os rótulos dos eixos
+labs(title='Quantidade de teses e dissertações sobre biblioteca digital', 
+caption='Fonte: BDTD', 
+y='',
+x='')+
+
+#Configurando o tema
+theme_bw()+
+theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    axis.text.x = element_text(angle = 45, vjust=0.5),
+    axis.line.x.top = element_blank(),
+    legend.position= c(.91,.86),
+    plot.title=element_text(size=15),
+    panel.border = element_rect(colour='lightgrey')
+)
+```
+Podemos ver que a explosão dos trabalhos acadêmicos sobre bibliotecas digitais foram no começo da década de 2010, em 2011.
+
+Seria interessante outro estudo para verificar essa foto do período, mas apenas com artigos de periódicos publicados.
+
+### Dissertação X Teses: Quantidade por instituição
+
+Verificarei a quantidade de documentos publicados por instituição para entender quais foram as que mais publicaram durante o período.
+
+```{r}
+#Modificando o nome de duas instituições que estavam com "_"
+bdtd_biblioteca_digital[bdtd_biblioteca_digital=="PUC_GO"] <- "PUC GO"
+bdtd_biblioteca_digital[bdtd_biblioteca_digital=="PUC_SP"] <- "PUC SP"
+```
+
+```{r}
+freq_instituicao <- cbind(frequencia = table(bdtd_biblioteca_digital$instituicao), percentual= prop.table(table(bdtd_biblioteca_digital$instituicao)) * 100)
+freq_instituicao
+```
+
+```{r}
+#Prepração dos dados para a visualização
+instituicoes <- data.frame(freq_instituicao)
+
+#Criarei uma categoria que se a instituição tiver entre os top 20% considerada maior e o restante menor
+instituicoes$categoria_quantidade <- ifelse(instituicoes$frequencia >= max(instituicoes$frequencia) * 0.8 , 'maior', 'menor')
+
+#Ordenando pela frequencia
+instituicoes <- instituicoes[order(instituicoes$frequencia), ]
+instituicoes$`instituicao` <- rownames(instituicoes)
+instituicoes$`instituicao` <- factor(instituicoes$`instituicao`, levels = instituicoes$`instituicao`) 
+```
+
+
+```{r}
+#Plotando o gráfico
+ggplot(data= instituicoes,aes(y=instituicao,x=frequencia,fill=categoria_quantidade)) + 
+geom_bar(stat='identity') +
+
+#Plotando os rótulos, título e subtítulo
+geom_text(aes(label = frequencia),hjust = -0.5) +
+ggtitle('Quantidade de teses e dissertações sobre biblioteca digital',
+          'Indexadas na BDTD de 1998 a 2019') +
+labs(x='',y='Instituições')+ 
+
+#Configurando as cores
+scale_fill_manual(values= c('maior'='darkorchid4','menor'='grey')) +
+
+#Configurando o tema
+theme(
+  panel.background = element_rect(fill = 'white'),
+  axis.text.x=element_blank(),
+  axis.ticks= element_blank(),
+  legend.position='none',
+  plot.title=element_text(size=15),
+  plot.subtitle=element_text(colour='darkgrey',face='bold', size=12)) +
+
+#Plotando o texto
+annotate(geom='text',label='UFMG e UNB então entre os 20%\n com maior quantidade',x=15,y=2,size=4,color='darkorchid4',fontface='bold',adj = 1)
+```
+
+#### Teses por instituição
+
+
+Verificarei por cada tipo de instituição.
+
+
+```{r}
+freq_instituicoes_tipos <- cbind(table(bdtd_biblioteca_digital$instituicao,bdtd_biblioteca_digital$tipos))
+freq_instituicoes_tipos <- as.data.frame(freq_instituicoes_tipos)
+freq_instituicoes_tipos
+```
+
+
+Filtrarei apenas as teses.
+
+```{r}
+teses <- select(freq_instituicoes_tipos,Teses)
+teses <- filter(teses, Teses > 0)
+```
+
+```{r}
+teses
+```
+
+```{r}
+#Regra dos top 20%
+teses$categoria_quantidade <- ifelse(teses$`Teses` >= max(teses$`Teses`) * 0.8 , 
+                                     'maior', 'menor')
+
+#Ordenando pela frequencia
+teses <- teses[order(teses$`Teses`), ]
+teses$`instituicao` <- rownames(teses)
+teses$`instituicao` <- factor(teses$`instituicao`, levels = teses$`instituicao`) 
+```
+
+
+
+```{r}
+#Plotando o gráfico
+ggplot(data= teses,aes(y=instituicao,x=Teses,fill=categoria_quantidade)) + 
+geom_bar(stat='identity') +
+
+#Plotando os rótulos, título e subtítulo
+geom_text(aes(label = Teses),hjust = -0.5) +
+ggtitle('Quantidade de teses sobre biblioteca digital','Indexadas na BDTD de 1998 a 2019') +
+labs(x='',y='Instituições')+ 
+
+#Configurando as cores
+scale_fill_manual(values= c('maior'='darkorchid4','menor'='grey')) +
+
+#Configurando o tema
+theme(
+  panel.background = element_rect(fill = 'white'),
+  axis.text.x=element_blank(),
+  axis.ticks= element_blank(),
+  legend.position='none',
+  plot.title=element_text(size=15),
+  plot.subtitle=element_text(colour='darkgrey',face='bold', size=12)) +
+
+#Configurando o texto
+annotate(geom='text',label='A UNB está entre os 20%\n com maior quantidade',x=5,y=0.8,size=4,color='darkorchid4',fontface='bold',adj = 1)
+```
+
+#### Dissertações por instituição
+
+
+```{r}
+dissertacoes <- select(freq_instituicoes_tipos,Dissertações)
+dissertacoes <- filter(dissertacoes, Dissertações > 0)
+```
+
+```{r}
+#Regra dos top 20%
+dissertacoes$categoria_quantidade <- ifelse(dissertacoes$`Dissertações` >= max(dissertacoes$`Dissertações`) * 0.8 , 'maior', 'menor')
+
+#Ordenando pela frequencia
+dissertacoes <- dissertacoes[order(dissertacoes$`Dissertações`), ]
+dissertacoes$`instituicao` <- rownames(dissertacoes)
+dissertacoes$`instituicao` <- factor(dissertacoes$`instituicao`, levels = dissertacoes$`instituicao`) 
+```
+
+
+```{r}
+#Plotando o gráfico
+ggplot(data= dissertacoes,aes(y=instituicao,x=Dissertações,fill=categoria_quantidade)) + 
+geom_bar(stat='identity') +
+
+#Plotando os rótulos, títulos e subtítulo
+geom_text(aes(label = Dissertações),hjust = -0.5) +
+ggtitle('Quantidade de dissertações sobre biblioteca digital','Indexadas na BDTD de 1998 a 2019') +
+labs(x='',y='instituicao')+ 
+
+#Configurando as cores
+scale_fill_manual(values= c('maior'='darkorchid4','menor'='grey')) +
+
+#Configurando o tema
+theme(
+  panel.background = element_rect(fill = 'white'),
+  axis.text.x=element_blank(),
+  axis.ticks= element_blank(),
+  legend.position='none',
+  plot.title=element_text(size=15),
+  plot.subtitle=element_text(colour='darkgrey',face='bold', size=12)) +
+
+#Configurando o texto
+annotate(geom='text',label='A UFMG está entre os 20%\n com maior quantidade',x=15,y=2,size=4,color='darkorchid4',fontface='bold',adj = 1)
+```
+
+## Considerações finais
+
+Foi possível verificar que o maior número de publicações de trabalhos acadêmicos sobre "biblioteca digital" entre 1998 e 2019 foi em 2011.
+
+As instituições que mais publicaram sobre o tema foram a UFMG e a UNB.
