@@ -1,7 +1,7 @@
-# Visualização de teses e dissertações sobre biblioteca digital na BDTD com R
+# Visualização de teses e dissertações sobre "biblioteca digital" na BDTD com R
 
 <p align="center"> 
-<img src="https://cdn-images-1.medium.com/max/800/0*TItcjJJ5NhSvdqHi"></a> 
+<img src="https://cdn-images-1.medium.com/max/800/0*TItcjJJ5NhSvdqHi" height= "700" width = "400"></a> 
 </p>
 
 photo by [Mollie Sivaram]() on [Unsplash](https://unsplash.com/)
@@ -22,7 +22,8 @@ Este projeto tem como objetivo principal realizar visualizações dos dados das 
 
 Ele será feito com a biblioteca ggplot2, além de utilizar a dplyr.
 
-Dataset
+### Dataset
+
 O dataset explorado neste projeto foi coletado através da BDTD no dia 11/06/2022.
 
 Método de coleta:
