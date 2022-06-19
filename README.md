@@ -20,7 +20,9 @@ Neste repositório você encontrará o projeto do meu [artigo]()
 
 Este projeto tem como objetivo principal realizar visualizações dos dados das teses e dissertações sobre biblioteca digital no Brasil.
 
-Ele será feito com a biblioteca ggplot2, além de utilizar a dplyr.
+Ele será feito com a biblioteca ggplot2, além de utilizar a dplyr do R.
+
+Fiz o projeto no google colab, utilizando R e também no RStudio Cloud, no qual disponibilizei o R Notebook na pasta Notebooks.
 
 ### Dataset
 
