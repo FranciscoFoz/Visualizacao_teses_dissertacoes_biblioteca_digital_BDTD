@@ -44,3 +44,11 @@ Você pode conferir o projeto completo no notebook do repositório.
 ## Considerações finais
 
 A visualização de dados é essencial para um melhor entendimento dos dados, podendo explorar, analisar e apresentar dados para à tomada de decisão.
+
+Foi possível verificar que o maior número de publicações de trabalhos acadêmicos sobre "biblioteca digital" entre 1998 e 2019 foi em 2011.
+
+As instituições que mais publicaram sobre o tema foram a UFMG e a UNB.
+
+## Visualizações
+
+
