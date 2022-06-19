@@ -51,4 +51,32 @@ As instituições que mais publicaram sobre o tema foram a UFMG e a UNB.
 
 ## Visualizações
 
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473054-2273ac5e-7be0-446b-a927-08fcd3f4a53b.png" height= "500" width = "500"></a> 
+</p>
+
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473076-58cabb05-1ad2-4bb1-9c25-415af64b58b7.png" height= "500" width = "500"></a> 
+</p>
+
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473079-3169cc70-2e7e-43cb-88a2-132bca99cabc.png" height= "500" width = "500"></a> 
+</p>
+
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473200-f1539685-db41-4a05-9e1a-56d4866a21a6.png" height= "500" width = "500"></a> 
+</p>
+
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473216-e3149ed7-1222-4ea0-a3a1-0f61a71963e4.png" height= "500" width = "500"></a> 
+</p>
+
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473360-f82c5c89-e6bb-40b6-b90c-220ca36809f1.png" height= "500" width = "500"></a> 
+</p>
+
+<p align="center"> 
+<img src="https://user-images.githubusercontent.com/64700794/174473391-544eeba7-c346-4308-a2ff-2081715eb8ac.png" height= "500" width = "500"></a> 
+</p>
+
 
